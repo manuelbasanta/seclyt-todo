@@ -3,14 +3,14 @@
 
 Kanban Board para la SECLYT
 
-### Install
+#### Install
 
 `npm install`
 
-###  Iniciar servidor
+####  Iniciar servidor
 
 `npm start`
 
-### Crear build de producción
+#### Crear build de producción
 
 `npm run build`
