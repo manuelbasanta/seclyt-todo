@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { DroppableList } from './components/DroppableList';
-import Video from './components/Video';
+import { WebcamCapture } from './components/Camera';
 import './App.css';
 
 
@@ -118,15 +118,15 @@ class App extends Component {
     render() {
         return (
             <div>
-            <DragDropContext onDragEnd={this.onDragEnd}>
-                <div className="listas" >
-                    <DroppableList title="To do" droppableId="toDoItems" items={this.state.toDoItems}/>
-                    <DroppableList title="Doing" droppableId="workingItems" items={this.state.workingItems}/>
-                    <DroppableList title="Done" droppableId="doneItems" items={this.state.doneItems}/>
-                </div>
+                <DragDropContext onDragEnd={this.onDragEnd}>
+                    <div className="listas" >
+                        <DroppableList title="To do" droppableId="toDoItems" items={this.state.toDoItems}/>
+                        <DroppableList title="Doing" droppableId="workingItems" items={this.state.workingItems}/>
+                        <DroppableList title="Done" droppableId="doneItems" items={this.state.doneItems}/>
+                    </div>
 
-            </DragDropContext>
-            <Video/>
+                </DragDropContext>
+                <WebcamCapture/>
             </div>
         ); 
     }
