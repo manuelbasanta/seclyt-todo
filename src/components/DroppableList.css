@@ -1,3 +1,9 @@
-.lista {
+
+.list-title {
+	text-align: center;
+	color: white;
+}
+
+.list {
 	margin: 10px;
 }

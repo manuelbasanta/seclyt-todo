@@ -5,23 +5,30 @@ import './DroppableList.css'
 
 const grid = 8;
 
-const getListStyle = (isDraggingOver) => ({
-	background: isDraggingOver ? 'lightblue' : 'lightgrey',
+const colors = {
+	toDoItems: '#028090',
+	workingItems: '#456990',
+	doneItems: '#F45B69',
+	dragging: '#C6CCC6'
+}
+ 
+const getListStyle = (isDraggingOver,list) => ({
+	background: isDraggingOver ? colors.dragging : colors[list],
 	padding: grid,
 	width: 250
 });
 
 export const DroppableList = props => {
-
 	return (
-		<div className="lista">
-			<h1>{props.title}</h1>
+		<div className="list">
+			<h1 className="list-title">{props.title}</h1>
 			<Droppable droppableId={props.droppableId} >
 
 		  		{(provided, snapshot) => (
+
 	        		<div 
 	          			ref={provided.innerRef} 
-	          			style={getListStyle(snapshot.isDraggingOver)}
+	          			style={getListStyle(snapshot.isDraggingOver, props.droppableId)}
 	          			{...provided.droppableProps}
 	        		>
 	              		{props.items.map((item, index) => (

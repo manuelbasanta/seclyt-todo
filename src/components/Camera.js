@@ -10,36 +10,38 @@ export class WebcamCapture extends React.Component {
 			src: ''
 		}
 	}
-  setRef = (webcam) => {
-    this.webcam = webcam;
-  }
 
-  capture = () => {
-    const imageSrc = this.webcam.getScreenshot();
-    this.setState({src: imageSrc});
-    console.log(imageSrc);
-  };
+    setRef = (webcam) => {
+        this.webcam = webcam;
+    }
 
-  render() {
-    const videoConstraints = {
-      width: 1280,
-      height: 720,
-      facingMode: 'user',
+    capture = () => {
+        const imageSrc = this.webcam.getScreenshot();
+        this.setState({src: imageSrc});
+        console.log(imageSrc);
     };
 
-    return (
-      <div>
-        <Webcam
-          audio={false}
-          height={350}
-          ref={this.setRef}
-          screenshotFormat="image/png"
-          width={350}
-          videoConstraints={videoConstraints}
-        />
-        <button onClick={this.capture}>Capture photo</button>
-        <img scr={this.state.src} />
-      </div>
-    );
-  }
+    render() {
+
+        const videoConstraints = {
+            width: 1280,
+            height: 720,
+            facingMode: 'user',
+        };
+
+        return (
+            <div>
+                <Webcam
+                    audio={false}
+                    height={350}
+                    ref={this.setRef}
+                    screenshotFormat="image/png"
+                    width={350}
+                    videoConstraints={videoConstraints}
+                />
+                <button onClick={this.capture}>Capture photo</button>
+                <img scr={this.state.src} />
+            </div>
+        );
+    }
 }
