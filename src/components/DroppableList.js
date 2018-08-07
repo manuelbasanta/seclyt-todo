@@ -21,21 +21,24 @@ const getListStyle = (isDraggingOver,list) => ({
 export const DroppableList = props => {
 	return (
 		<div className="list">
-			<h1 className="list-title">{props.title}</h1>
+			
 			<Droppable droppableId={props.droppableId} >
 
 		  		{(provided, snapshot) => (
-
+		  			
+		  			
 	        		<div 
 	          			ref={provided.innerRef} 
 	          			style={getListStyle(snapshot.isDraggingOver, props.droppableId)}
 	          			{...provided.droppableProps}
 	        		>
+	        		<h1 className="list-title">{props.title}</h1>
 	              		{props.items.map((item, index) => (
 	                		<DraggableItem item={ item } index={ index } key={item.id}/>
 	               		))}
 	          			{provided.placeholder}
 	        		</div>
+	        	
 	       		)}
 		  	</Droppable>
 	  	</div>

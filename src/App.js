@@ -54,21 +54,24 @@ class App extends Component {
         for (let i = 0; i < 10; i++) {
             toDoItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`
+                content: `Tarea ${i}`,
+                desc: 'Descripción de la tarea'
             })
         }
 
         for (let i = 10; i < 20; i++) {
             workingItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`
+                content: `Tarea ${i}`,
+                desc: 'Descripción de la tarea'
             })
         }
 
         for (let i = 20; i < 30; i++) {
             doneItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`
+                content: `Tarea ${i}`,
+                desc: 'Descripción de la tarea'
             })
         }
 
