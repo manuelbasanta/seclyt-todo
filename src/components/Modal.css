@@ -1,3 +1,16 @@
-.modal {
-	min-width: 500px;
+.edit-btn {
+/*	position: absolute;
+    bottom: -12px;
+    right: 0px;*/
+    display: inline-flex;
+    margin-left: 5px;
+}
+
+.edit-btn:hover {
+	cursor:pointer;
+}
+
+.modal-editable {
+	position: relative;
+	line-height: 1.8;
 }

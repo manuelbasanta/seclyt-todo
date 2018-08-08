@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { DroppableList } from './components/DroppableList';
-import { WebcamCapture } from './components/Camera';
+//import { WebcamCapture } from './components/Camera';
 import './App.css';
 
 
@@ -63,7 +63,8 @@ class App extends Component {
             workingItems.push({
                 id: `item-${i}`,
                 content: `Tarea ${i}`,
-                desc: 'Descripción de la tarea'
+                desc: 'Descripción de la tarea larga para que sea truncada en el preview, así no es muy larga e incomoda y por\
+                        sobre todo no se pase de sus limites'
             })
         }
 
@@ -129,7 +130,7 @@ class App extends Component {
                     </div>
 
                 </DragDropContext>
-                <WebcamCapture/>
+                {/*<WebcamCapture/>*/}
             </div>
         ); 
     }

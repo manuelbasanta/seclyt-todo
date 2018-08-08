@@ -5,6 +5,7 @@ import './DraggableItem.css'
 
 const grid = 8;
 
+// Estilo de la terea según se este drageando o no
 const getItemStyle = (draggableStyle, isDragging) => ({
 	// some basic styles to make the items look a bit nicer
 	userSelect: 'none',
@@ -29,17 +30,24 @@ export class DraggableItem extends React.Component {
             modalOpen: false
         }
 
+        //this.truncateDesc = this.truncateDesc.bind(this);
         this.onClick = this.onClick.bind(this);
     }
 
-
+    // Setea el estado a modal abierto cuando se abre el modal
     onOpenModal = () => {
         this.setState({ modalOpen: true });
     };
 
+    // Setea el estado a modal cerrado cuando se cierra el modal
     onCloseModal = () => {
         this.setState({modalOpen: false });
     };
+
+    // trunca una string para mostrart
+    truncateDesc = ( desc, maxLength) => {
+        return desc.length > maxLength ? desc.slice(0, maxLength).concat('...') : desc ;
+    }
 
     // Using onClick as it will be correctly
     // preventing if there was a drag
@@ -59,10 +67,8 @@ export class DraggableItem extends React.Component {
         const wasMetaKeyUsed: boolean = event.metaKey;
         const wasShiftKeyUsed: boolean = event.shiftKey;
 
-        console.log(wasMetaKeyUsed, wasShiftKeyUsed)
-
         this.onOpenModal();
-        console.log(this.state)
+
     };
 
 
@@ -89,7 +95,7 @@ export class DraggableItem extends React.Component {
                             >
                                 {this.props.item.content}
                                 <div className="task-desc">
-                                    {this.props.item.desc}
+                                    {this.truncateDesc(this.props.item.desc, 35)}
                                 </div>
                             </div>
 
