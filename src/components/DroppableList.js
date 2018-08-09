@@ -19,6 +19,7 @@ const getListStyle = (isDraggingOver,list) => ({
 });
 
 export const DroppableList = props => {
+
 	return (
 		<div className="list">
 			

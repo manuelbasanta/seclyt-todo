@@ -4,54 +4,73 @@ import MaterialIcon from 'material-icons-react';
 import './Modal.css';
 import { BrowserView,  MobileView,  isBrowser,  isMobile } from "react-device-detect";
 
+
+
 export class ModalBox extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-            editDescShown: false,
-            editTitleShown: false
+            title: this.props.data.title,
+            editingTitle: false
         }
     }
     
-    mouseOver = (element) => {
-        this.setState({[element]: true});
-    }
 
-    mouseOut = (element) => {
-        this.setState({[element]: false});
-    }
+    editModalElement = (element) => {
 
-    editModalElement = () => {
+        this.setState({
+            [element]: false
+        })
 
     }
 
     render() {
 
-        
         return (
             <div className="modal" >
-                <Modal open={this.props.open} onClose={this.props.closeModal} center>
-
-                    <BrowserView>
-
-                        <h2 className="modal-editable" onMouseOver={() => this.mouseOver('editTitleShown')} onMouseLeave={() => this.mouseOut('editTitleShown')}>
-                            {this.props.data.content}
-                            < div className="edit-btn" onClick={this.editModalElement}>
-                                {this.state.editTitleShown && <MaterialIcon icon="edit" size={18}/>}
-                            </div>
-                        </h2>
+                <Modal open={this.props.open} onClose={this.props.closeModal} classNames={{ modal: 'modal' }} center>
                     
+                    { this.state.editingTitle ? (
+                            <div>
+                                <input value={this.state.title} onChange={e => this.setState({ title: e.target.value })}/>
+                                <div className="" onClick={ () => {
+                                    this.editModalElement('editingTitle')
 
-                        <div className="modal-editable" onMouseOver={() => this.mouseOver('editDescShown')} onMouseLeave={() => this.mouseOut('editDescShown')} >
+                                    
+                                                            }}
+                                >
+                                    <MaterialIcon icon="save" size={18} />
+                                </div>
+
+                            </div>
+
+                        ) : (
+
+                        <h2 className={isMobile ? "modal-editable-mobile" : "modal-editable" }>
+
+                            {this.state.title}
+                            
+                
+                            <div className="edit-btn" onClick={this.setState({ editingTitle: true })}>
+                                <MaterialIcon icon="edit" size={18}/>
+                            </div>
+                           
+                        </h2>
+
+                        )
+                    }
+
+                  
+
+                        <div className={isMobile ? "modal-editable-mobile" : "modal-editable" } >
                             {this.props.data.desc}
-                            < div className="edit-btn" onClick={this.editModalElement}>
-                                {this.state.editDescShown && <MaterialIcon icon="edit" size={18}/>}
+                            <div className="edit-btn" >
+                                <MaterialIcon icon="edit" size={18}/>
                             </div>
                         </div>
 
-                    </BrowserView>
 
                 </Modal>
             </div>

@@ -27,6 +27,7 @@ export class DraggableItem extends React.Component {
         super(props);
 
         this.state = {
+            
             modalOpen: false
         }
 
@@ -73,6 +74,7 @@ export class DraggableItem extends React.Component {
 
 
     render () {
+
         return (
             <div>
                 <Draggable
@@ -93,7 +95,7 @@ export class DraggableItem extends React.Component {
                                 )}
                                 onClick={this.onClick}
                             >
-                                {this.props.item.content}
+                                {this.props.item.title}
                                 <div className="task-desc">
                                     {this.truncateDesc(this.props.item.desc, 35)}
                                 </div>

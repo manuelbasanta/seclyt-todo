@@ -54,7 +54,7 @@ class App extends Component {
         for (let i = 0; i < 10; i++) {
             toDoItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`,
+                title: `Tarea ${i}`,
                 desc: 'Descripción de la tarea'
             })
         }
@@ -62,7 +62,7 @@ class App extends Component {
         for (let i = 10; i < 20; i++) {
             workingItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`,
+                title: `Tarea ${i}`,
                 desc: 'Descripción de la tarea larga para que sea truncada en el preview, así no es muy larga e incomoda y por\
                         sobre todo no se pase de sus limites'
             })
@@ -71,7 +71,7 @@ class App extends Component {
         for (let i = 20; i < 30; i++) {
             doneItems.push({
                 id: `item-${i}`,
-                content: `Tarea ${i}`,
+                title: `Tarea ${i}`,
                 desc: 'Descripción de la tarea'
             })
         }
@@ -84,6 +84,7 @@ class App extends Component {
     } 
 
    onDragEnd = result => {
+        console.log(result);
         const { source, destination } = result;
 
         // dropped outside the list
@@ -120,6 +121,7 @@ class App extends Component {
   
 
     render() {
+        console.log(this.state)
         return (
             <div>
                 <DragDropContext onDragEnd={this.onDragEnd}>

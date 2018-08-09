@@ -1,16 +1,25 @@
-.edit-btn {
-/*	position: absolute;
-    bottom: -12px;
-    right: 0px;*/
-    display: inline-flex;
-    margin-left: 5px;
+.modal {
+	min-width: 270px;
+}
+
+.modal-editable, .modal-editable-mobile {
+	line-height: 1.8;
+}
+
+.modal-editable:hover .edit-btn {
+	display: inline-flex;
+    margin-left: 10px;
+}
+
+.modal-editable .edit-btn {
+	display: none
+}
+
+.modal-editable-mobile .edit-btn {
+	display: inline-flex;
+	margin-left: 10px;
 }
 
 .edit-btn:hover {
 	cursor:pointer;
-}
-
-.modal-editable {
-	position: relative;
-	line-height: 1.8;
 }
