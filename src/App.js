@@ -34,57 +34,72 @@ class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            toDoItems: [],
-            workingItems: [],
-            doneItems: []
-        }
-
+        this.editTask = this.editTask.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
     }
 
+    fetchLists() {
+        const fetch = window.fetch.bind(window)
+        fetch('http://10.79.23.24:3000/api/v1/tasks')
+            .then(response => response.json())
+            .then(data => this.setState({data}))
+    }
 
     // Acá va la request al back (esta trucha por ahora)
     componentDidMount () {
 
-        let toDoItems = [];
-        let workingItems = [];
-        let doneItems = [];
+        // let todo = {
+        //     title: 'To do',
+        //     tasks: []
+        // };
+        // let doing = {
+        //     title: 'Doing',
+        //     tasks: []
+        // };
+        // let done = {
+        //     title: 'Done',
+        //     tasks: []
+        // };
 
-        for (let i = 0; i < 10; i++) {
-            toDoItems.push({
-                id: `item-${i}`,
-                title: `Tarea ${i}`,
-                desc: 'Descripción de la tarea'
-            })
-        }
+        // for (let i = 0; i < 10; i++) {
+        //     todo.tasks.push({
+        //         id: `item-${i}`,
+        //         title: `Tarea ${i}`,
+        //         desc: 'Descripción de la tarea',
+        //         list: 'todo'
+        //     })
+        // }
 
-        for (let i = 10; i < 20; i++) {
-            workingItems.push({
-                id: `item-${i}`,
-                title: `Tarea ${i}`,
-                desc: 'Descripción de la tarea larga para que sea truncada en el preview, así no es muy larga e incomoda y por\
-                        sobre todo no se pase de sus limites'
-            })
-        }
+        // for (let i = 10; i < 20; i++) {
+        //     doing.tasks.push({
+        //         id: `item-${i}`,
+        //         title: `Tarea ${i}`,
+        //         desc: 'Descripción de la tarea larga para que sea truncada en el preview, así no es muy larga e incomoda y por sobre todo no se pase de sus limites',
+        //         list: 'doing'
+        //     })
+        // }
 
-        for (let i = 20; i < 30; i++) {
-            doneItems.push({
-                id: `item-${i}`,
-                title: `Tarea ${i}`,
-                desc: 'Descripción de la tarea'
-            })
-        }
+        // for (let i = 20; i < 30; i++) {
+        //     done.tasks.push({
+        //         id: `item-${i}`,
+        //         title: `Tarea ${i}`,
+        //         desc: 'Descripción de la tarea',
+        //         list: 'done'
+        //     })
+        // }
 
-        this.setState({
-            toDoItems,
-            workingItems,
-            doneItems
-        })
+        // this.setState({
+        //     todo,
+        //     doing,
+        //     done
+        // })
+
+        this.fetchLists();
+
     } 
 
-   onDragEnd = result => {
-        console.log(result);
+    onDragEnd = result => {
+
         const { source, destination } = result;
 
         // dropped outside the list
@@ -95,46 +110,76 @@ class App extends Component {
         // Drop en la misma lista
         if (source.droppableId === destination.droppableId) {
             const items = reorder(
-                this.state[source.droppableId], 
+                this.state[source.droppableId].tasks, 
                 source.index,
                 destination.index
             );
 
+            let stateCopy = this.state[source.droppableId];
+           
+            stateCopy.tasks = items;
+
             this.setState({
-                [ source.droppableId ]: items,
+                [source.droppableId]: stateCopy,
             });
+
         // Drop de una lista a otra
         } else {
             const result = move(
-                this.state[source.droppableId],
-                this.state[destination.droppableId],
+                this.state[source.droppableId].tasks,
+                this.state[destination.droppableId].tasks,
                 source,
                 destination
             );
 
+            let stateCopySource = this.state[source.droppableId];
+            stateCopySource.tasks = result[source.droppableId];
+
+            let stateCopyDestination = this.state[destination.droppableId];
+            stateCopyDestination.tasks = result[destination.droppableId];
+
             this.setState({
-                [source.droppableId]: result[source.droppableId],
-                [destination.droppableId]: result[destination.droppableId]
+                [source.droppableId]: stateCopySource,
+                [destination.droppableId]: stateCopyDestination
             });
         }
     };
   
+    editTask = (data, dataTochange, newData) => {
+        
+        let newTask = data;
+
+        // Que parte de la tarea vamos a cambiar
+        dataTochange === 'title' ? newTask.title = newData : newTask.desc = newData;
+
+        this.setState({
+
+            [data.list]: this.state[data.list].map(task => task.id === data.id ? newTask : task )
+        })
+
+    }
 
     render() {
-        console.log(this.state)
-        return (
-            <div>
-                <DragDropContext onDragEnd={this.onDragEnd}>
-                    <div className="listas" >
-                        <DroppableList title="To do" droppableId="toDoItems" items={this.state.toDoItems}/>
-                        <DroppableList title="Doing" droppableId="workingItems" items={this.state.workingItems}/>
-                        <DroppableList title="Done" droppableId="doneItems" items={this.state.doneItems}/>
-                    </div>
+console.log(this.state)
+        if (this.state != null) {
+            return (
+                <div>
+                    <DragDropContext onDragEnd={this.onDragEnd}>
+                        <div className="listas" >
+                            { Object.keys(this.state).map(
+                                key =>  <DroppableList title={this.state[key].title} droppableId={key} key={key} items={this.state[key].tasks } editTask={this.editTask}/>
+                            )}
 
-                </DragDropContext>
-                {/*<WebcamCapture/>*/}
-            </div>
-        ); 
+                        </div>
+
+                    </DragDropContext>
+                    {/*<WebcamCapture/>*/}
+                </div>
+            );            
+        } else {
+            return <div>Loading..</div>
+        }
+
     }
 }
 

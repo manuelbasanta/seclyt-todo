@@ -65,8 +65,8 @@ export class DraggableItem extends React.Component {
         // marking the event as used
         event.preventDefault();
 
-        const wasMetaKeyUsed: boolean = event.metaKey;
-        const wasShiftKeyUsed: boolean = event.shiftKey;
+        //const wasMetaKeyUsed: boolean = event.metaKey;
+        //const wasShiftKeyUsed: boolean = event.shiftKey;
 
         this.onOpenModal();
 
@@ -107,7 +107,10 @@ export class DraggableItem extends React.Component {
                 </Draggable>
                 <ModalBox open={this.state.modalOpen} 
                           closeModal={this.onCloseModal}
-                          data={this.props.item} />
+                          data={this.props.item} 
+                          editTask={this.props.editTask}
+
+                />
             </div>
         );      
     }

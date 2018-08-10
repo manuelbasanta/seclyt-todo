@@ -20,6 +20,11 @@
 	margin-left: 10px;
 }
 
-.edit-btn:hover {
+.edit-btn:hover, .save-btn:hover {
 	cursor:pointer;
+}
+
+.save-btn {
+	display: inline-flex;
+	margin-left: 10px;
 }

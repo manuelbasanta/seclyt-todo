@@ -6,9 +6,9 @@ import './DroppableList.css'
 const grid = 8;
 
 const colors = {
-	toDoItems: '#028090',
-	workingItems: '#456990',
-	doneItems: '#F45B69',
+	todo: '#028090',
+	doing: '#456990',
+	done: '#F45B69',
 	dragging: '#C6CCC6'
 }
  
@@ -21,6 +21,7 @@ const getListStyle = (isDraggingOver,list) => ({
 export const DroppableList = props => {
 
 	return (
+
 		<div className="list">
 			
 			<Droppable droppableId={props.droppableId} >
@@ -35,7 +36,7 @@ export const DroppableList = props => {
 	        		>
 	        		<h1 className="list-title">{props.title}</h1>
 	              		{props.items.map((item, index) => (
-	                		<DraggableItem item={ item } index={ index } key={item.id}/>
+	                		<DraggableItem item={ item } index={ index } key={item.id} editTask={props.editTask} />
 	               		))}
 	          			{provided.placeholder}
 	        		</div>
