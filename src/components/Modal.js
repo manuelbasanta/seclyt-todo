@@ -33,6 +33,7 @@ export class ModalBox extends React.Component {
                                 <input value={this.state.title} onChange={ (e) => this.setState({title: e.target.value}) } onKeyPress={ e => {
                                     console.log(e);
                                     if (e.key === 'Enter') {
+                                        console.log(this.props)
                                         this.props.editTask(this.props.data, 'title' , this.state.title);
                                         this.setState({ editingTitle: false })
                                     }   

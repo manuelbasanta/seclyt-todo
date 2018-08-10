@@ -40,9 +40,9 @@ class App extends Component {
 
     fetchLists() {
         const fetch = window.fetch.bind(window)
-        fetch('http://10.79.23.24:3000/api/v1/tasks')
+        fetch('https://mbarragan-board.herokuapp.com/api/v1/tasks')
             .then(response => response.json())
-            .then(data => this.setState({data}))
+            .then(data => this.setState({...data}))
     }
 
     // Acá va la request al back (esta trucha por ahora)
@@ -152,9 +152,13 @@ class App extends Component {
         // Que parte de la tarea vamos a cambiar
         dataTochange === 'title' ? newTask.title = newData : newTask.desc = newData;
 
+        let stateCopy = this.state[data.list];
+
+        stateCopy.tasks =  this.state[data.list].tasks.map(task => task.id === data.id ? newTask : task );
+
         this.setState({
 
-            [data.list]: this.state[data.list].map(task => task.id === data.id ? newTask : task )
+            [data.list]: stateCopy
         })
 
     }
