@@ -181,7 +181,7 @@ console.log(this.state)
                 </div>
             );            
         } else {
-            return <div>Loading..</div>
+            return <div className="loader">Loading...</div>
         }
 
     }
