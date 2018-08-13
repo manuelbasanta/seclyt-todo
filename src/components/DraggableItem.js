@@ -47,7 +47,7 @@ export class DraggableItem extends React.Component {
 
     // trunca una string para mostrart
     truncateDesc = ( desc, maxLength) => {
-        return desc.length > maxLength ? desc.slice(0, maxLength).concat('...') : desc ;
+        return desc.length > maxLength ? desc.substring(0, maxLength).concat('...') : desc ;
     }
 
     // Using onClick as it will be correctly
@@ -94,10 +94,11 @@ export class DraggableItem extends React.Component {
                                     snapshot.isDragging
                                 )}
                                 onClick={this.onClick}
+                                className="noselect"
                             >
                                 {this.props.item.title}
                                 <div className="task-desc">
-                                    {this.truncateDesc(this.props.item.desc, 35)}
+                                    {this.truncateDesc(this.props.item.desc, 28)}
                                 </div>
                             </div>
 

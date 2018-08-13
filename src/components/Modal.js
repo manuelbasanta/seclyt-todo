@@ -4,7 +4,14 @@ import MaterialIcon from 'material-icons-react';
 import './Modal.css';
 import { /*BrowserView,  MobileView,  isBrowser,*/  isMobile } from "react-device-detect";
 
-
+// Estilos textarea
+const textareaStyles = {
+    overflow: 'auto',
+    resize: 'none',
+    whiteSpace: 'unset',
+    fontSize: 16,
+    fontFamily: 'Roboto-Regular'
+}
 
 export class ModalBox extends React.Component {
 
@@ -13,7 +20,9 @@ export class ModalBox extends React.Component {
 
         this.state = {
             title: this.props.data.title,
-            editingTitle: false
+            desc: this.props.data.desc,
+            editingTitle: false,
+            editingDesc: false
         }
     }
     
@@ -30,10 +39,8 @@ export class ModalBox extends React.Component {
 
                             <div>
 
-                                <input value={this.state.title} onChange={ (e) => this.setState({title: e.target.value}) } onKeyPress={ e => {
-                                    console.log(e);
+                                <input className="title-input" value={this.state.title} onChange={ (e) => this.setState({title: e.target.value}) } onKeyPress={ e => {
                                     if (e.key === 'Enter') {
-                                        console.log(this.props)
                                         this.props.editTask(this.props.data, 'title' , this.state.title);
                                         this.setState({ editingTitle: false })
                                     }   
@@ -63,14 +70,38 @@ export class ModalBox extends React.Component {
                         )
                     }
 
-                  
+                    { this.state.editingDesc ? (
 
-                        <div className={isMobile ? "modal-editable-mobile" : "modal-editable" } >
-                            {this.props.data.desc}
-                            <div className="edit-btn" >
-                                <MaterialIcon icon="edit" size={18}/>
+                            <div>
+                                <textarea style={textareaStyles} rows="3" cols="60"  wrap="off" className="" value={this.state.desc} onChange={ (e) => this.setState({desc: e.target.value}) } onKeyPress={ e => {
+                                    if (e.key === 'Enter') {
+                                        this.props.editTask(this.props.data, 'desc' , this.state.desc);
+                                        this.setState({ editingDesc: false })
+                                    }   
+                                } }></textarea>
+
+                                <div className="save-btn" onClick={ () => {
+                                    this.props.editTask(this.props.data, 'desc' , this.state.desc);
+                                    this.setState({ editingDesc: false })
+                                }}>
+                                    <MaterialIcon icon="save" size={18} />
+                                </div>
+
                             </div>
-                        </div>
+
+                        ) : (
+
+                            <div className={isMobile ? "modal-editable-mobile" : "modal-editable" } >
+                                {this.props.data.desc}
+                                <div className="edit-btn" onClick={() => this.setState({ editingDesc: true })} >
+                                    <MaterialIcon icon="edit" size={18}/>
+                                </div>
+                            </div>
+
+                        )
+                    }
+
+
 
 
                 </Modal>

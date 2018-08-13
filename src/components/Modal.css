@@ -28,3 +28,19 @@
 	display: inline-flex;
 	margin-left: 10px;
 }
+
+.title-input {
+    font-size: 1.5em;
+    -webkit-margin-before: 0.83em;
+    -webkit-margin-after: 0.83em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+}
+
+.desc-input {
+    overflow: auto;
+    resize: none;
+    white-space: unset;
+    font-size: 16px;
+    font-family: 'Roboto-Regular';
+}
