@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { DroppableList } from './components/DroppableList';
 //import { WebcamCapture } from './components/Camera';
 import './App.css';
-
 
 // a little function to help us with reordering the result
 const reorder =  (list, startIndex, endIndex) => {
@@ -34,6 +33,9 @@ class App extends Component {
     constructor(props) {
         super(props);
 
+        this.states = {
+            lists: []
+        }
         this.editTask = this.editTask.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
     }
@@ -42,61 +44,22 @@ class App extends Component {
         const fetch = window.fetch.bind(window)
         fetch('https://mbarragan-board.herokuapp.com/api/v1/tasks')
             .then(response => response.json())
-            .then(data => this.setState({...data}))
+            .then(data => this.setState({lists: data}))
     }
 
-    // Acá va la request al back (esta trucha por ahora)
+    // Request de tareas
     componentDidMount () {
-
-        // let todo = {
-        //     title: 'To do',
-        //     tasks: []
-        // };
-        // let doing = {
-        //     title: 'Doing',
-        //     tasks: []
-        // };
-        // let done = {
-        //     title: 'Done',
-        //     tasks: []
-        // };
-
-        // for (let i = 0; i < 10; i++) {
-        //     todo.tasks.push({
-        //         id: `item-${i}`,
-        //         title: `Tarea ${i}`,
-        //         desc: 'Descripción de la tarea',
-        //         list: 'todo'
-        //     })
-        // }
-
-        // for (let i = 10; i < 20; i++) {
-        //     doing.tasks.push({
-        //         id: `item-${i}`,
-        //         title: `Tarea ${i}`,
-        //         desc: 'Descripción de la tarea larga para que sea truncada en el preview, así no es muy larga e incomoda y por sobre todo no se pase de sus limites',
-        //         list: 'doing'
-        //     })
-        // }
-
-        // for (let i = 20; i < 30; i++) {
-        //     done.tasks.push({
-        //         id: `item-${i}`,
-        //         title: `Tarea ${i}`,
-        //         desc: 'Descripción de la tarea',
-        //         list: 'done'
-        //     })
-        // }
-
-        // this.setState({
-        //     todo,
-        //     doing,
-        //     done
-        // })
-
         this.fetchLists();
-
+        //this.setState({lists: db})
     } 
+
+    getListIndex(nameKey, array) {       
+        for (var i=0; i < array.length; i++) {
+            if (array[i].title === nameKey) {
+                return i;
+            }
+        }
+    }
 
     onDragEnd = result => {
 
@@ -107,74 +70,106 @@ class App extends Component {
             return;
         }
 
-        // Drop en la misma lista
-        if (source.droppableId === destination.droppableId) {
+        // Dragueo de listas
+        if (source.droppableId === 'context' ) {
+
             const items = reorder(
-                this.state[source.droppableId].tasks, 
+                this.state.lists, 
                 source.index,
                 destination.index
             );
 
-            let stateCopy = this.state[source.droppableId];
+            this.setState({lists: items});
+        
+        // Drop en la misma lista
+        } else if (source.droppableId === destination.droppableId) {
+            
+            let listIndex = this.getListIndex(source.droppableId, this.state.lists);
+
+            const items = reorder(
+                this.state.lists[listIndex].tasks, 
+                source.index,
+                destination.index
+            );
+
+            let stateCopy = this.state.lists;
            
-            stateCopy.tasks = items;
+            stateCopy[listIndex].tasks = items;
 
             this.setState({
-                [source.droppableId]: stateCopy,
+                lists: stateCopy,
             });
 
         // Drop de una lista a otra
         } else {
+
+            let listIndexSource = this.getListIndex(source.droppableId, this.state.lists);
+            let listIndexDestination = this.getListIndex(destination.droppableId, this.state.lists);
+
             const result = move(
-                this.state[source.droppableId].tasks,
-                this.state[destination.droppableId].tasks,
+                this.state.lists[listIndexSource].tasks,
+                this.state.lists[listIndexDestination].tasks,
                 source,
                 destination
             );
 
-            let stateCopySource = this.state[source.droppableId];
-            stateCopySource.tasks = result[source.droppableId];
+            let stateCopy = this.state.lists;
 
-            let stateCopyDestination = this.state[destination.droppableId];
-            stateCopyDestination.tasks = result[destination.droppableId];
+            stateCopy[listIndexSource].tasks = result[source.droppableId];
+            stateCopy[listIndexDestination].tasks = result[destination.droppableId];
 
             this.setState({
-                [source.droppableId]: stateCopySource,
-                [destination.droppableId]: stateCopyDestination
+                lists: stateCopy
             });
         }
     };
   
-    editTask = (data, dataTochange, newData) => {
+    editTask = (data, dataTochange, newData, listParent) => {
         
         let newTask = data;
+
+        let listIndex = this.getListIndex(listParent, this.state.lists);
 
         // Que parte de la tarea vamos a cambiar
         dataTochange === 'title' ? newTask.title = newData : newTask.desc = newData;
 
-        let stateCopy = this.state[data.list];
+        let stateCopy = this.state.lists;
 
-        stateCopy.tasks =  this.state[data.list].tasks.map(task => task.id === data.id ? newTask : task );
+        stateCopy[listIndex].tasks =  this.state.lists[listIndex].tasks.map(task => task.id === data.id ? newTask : task );
 
         this.setState({
 
-            [data.list]: stateCopy
+            lists: stateCopy
         })
 
     }
 
     render() {
-console.log(this.state)
+
         if (this.state != null) {
+
             return (
                 <div>
                     <DragDropContext onDragEnd={this.onDragEnd}>
-                        <div className="listas" >
-                            { Object.keys(this.state).map(
-                                key =>  <DroppableList title={this.state[key].title} droppableId={key} key={key} items={this.state[key].tasks } editTask={this.editTask}/>
-                            )}
 
-                        </div>
+                        <Droppable droppableId="context" direction="horizontal" type="listDrop">
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                            >
+                                <div className="listas" >
+                                    { this.state.lists.map(
+                                        (list, i) =>  <DroppableList color={list.color} type="listDrop" droppableId={list.title} index={i} key={list.title} items={ list.tasks } editTask={this.editTask}/>
+                                    )}
+
+                                </div>
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+
+
 
                     </DragDropContext>
                     {/*<WebcamCapture/>*/}

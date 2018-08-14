@@ -74,7 +74,7 @@ export class DraggableItem extends React.Component {
 
 
     render () {
-
+        
         return (
             <div>
                 <Draggable
@@ -84,6 +84,7 @@ export class DraggableItem extends React.Component {
                     
                 >
                     {(provided, snapshot) => (
+
                         <div>
                             <div
                                 ref={provided.innerRef}
@@ -110,6 +111,7 @@ export class DraggableItem extends React.Component {
                           closeModal={this.onCloseModal}
                           data={this.props.item} 
                           editTask={this.props.editTask}
+                          listParent={this.props.listParent}
 
                 />
             </div>
