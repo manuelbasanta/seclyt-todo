@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { DroppableList } from './components/DroppableList';
 //import { WebcamCapture } from './components/Camera';
+import {db} from './db';
 import './App.css';
 
 // a little function to help us with reordering the result
@@ -36,6 +37,7 @@ class App extends Component {
         this.states = {
             lists: []
         }
+
         this.editTask = this.editTask.bind(this);
         this.onDragEnd = this.onDragEnd.bind(this);
     }
@@ -43,7 +45,15 @@ class App extends Component {
     fetchLists() {
         const fetch = window.fetch.bind(window)
         fetch('https://mbarragan-board.herokuapp.com/api/v1/tasks')
-            .then(response => response.json())
+            .then(response => {
+                
+                if (response.ok) {
+                    return response.json()
+                } else {
+                    return null
+                }
+                
+            })
             .then(data => this.setState({lists: data}))
     }
 
@@ -145,8 +155,8 @@ class App extends Component {
     }
 
     render() {
-
-        if (this.state != null) {
+        console.log(this.state)
+        if (this.state != null ) {
 
             return (
                 <div>

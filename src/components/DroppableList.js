@@ -6,59 +6,97 @@ import './DroppableList.css'
 const grid = 8;
 
 const colors = {
-	'To do': '#028090',
-	Doing: '#456990',
-	Done: '#F45B69',
-	dragging: '#C6CCC6'
-}
- 
-const getListStyle = (isDraggingOver,list) => ({
+	'Gris tenue': '#696D7D',
+	'Topaz': '#FFD275',
+	'Rojo medio': '#E39774',
+	'Azul cadete': '#5C9EAD',
+	'Fuzzy wuzzy': '#C97064',
+	'Xanadu': '#73937E',
+	'Coral negro': '#565676',
+	'Negro': '#000000' ,
+	'dragging': '#C6CCC6'
+};
 
-	background: isDraggingOver ? colors.dragging : colors[list],
+const getListStyle = (isDraggingOver,colorName) => ({
+
+	background: isDraggingOver ? colors.dragging : colors[colorName],
 	padding: grid,
-	width: 250
+	width: 250,
+	transition: 'background .3s'
 });
 
-export const DroppableList = props => {
-
-	return (
-
-			<Draggable draggableId={props.droppableId} index={props.index}>
-			  {(provided, snapshot) => (
-			    <div
-			      ref={provided.innerRef}
-			      {...provided.draggableProps}
-			      {...provided.dragHandleProps}
-			    >
-					<div className="list">
-			
-						<Droppable droppableId={props.droppableId} >
-
-					  		{(provided, snapshot) => (
-					  			
-					  			
-				        		<div 
-				          			ref={provided.innerRef} 
-				          			style={getListStyle(snapshot.isDraggingOver, props.droppableId)}
-				          			{...provided.droppableProps}
-				        		>
-				        		<h1 className="list-title">{props.droppableId}</h1>
-				              		{props.items.map((item, index) => (
-
-				                		<DraggableItem listParent={props.droppableId} item={ item } index={ index } key={item.id} editTask={props.editTask} />
-				              			
-				               		))}
-				          			{provided.placeholder}
-				        		</div>
-				        	
-				       		)}
-					  	</Droppable>
-				  	</div>
-			    </div>
-			  )}
-			</Draggable>
 
 
-	);
+export class DroppableList extends React.Component {
+
+	constructor(props) {
+		super(props);
+
+		this.onClick = this.onClick.bind(this);
+	}
+
+    onClick = (event: MouseEvent) => {
+
+        if (event.defaultPrevented) {
+            return;
+        }
+
+        if (event.button !== 0 ) {
+            return;
+        }
+
+        // marking the event as used
+        event.preventDefault();
+
+        //const wasMetaKeyUsed: boolean = event.metaKey;
+        //const wasShiftKeyUsed: boolean = event.shiftKey;
+
+        console.log(React.Children);
+
+    };
+
+	render () {
+		return (
+
+				<Draggable draggableId={this.props.droppableId} index={this.props.index}>
+				  {(provided, snapshot) => (
+				    <div
+				      ref={provided.innerRef}
+				      {...provided.draggableProps}
+				      {...provided.dragHandleProps}
+				    >
+						<div className="list">
+				
+							<Droppable droppableId={this.props.droppableId} >
+
+						  		{(provided, snapshot) => (
+						  			
+						  			
+					        		<div 
+					          			ref={provided.innerRef} 
+					          			style={getListStyle(snapshot.isDraggingOver, this.props.color)}
+					          			{...provided.droppableProps}
+					          			onClick={this.onClick}
+					        		>
+					        		<h1 className="list-title">{this.props.droppableId}</h1>
+					              		{this.props.items.map((item, index) => (
+
+					                		<DraggableItem listParent={this.props.droppableId} item={ item } index={ index } key={item.id} editTask={this.props.editTask} />
+					              			
+					               		))}
+					          			{provided.placeholder}
+					        		</div>
+					        	
+					       		)}
+						  	</Droppable>
+					  	</div>
+				    </div>
+				  )}
+				</Draggable>
+
+
+		);
+
+	}
 
 }

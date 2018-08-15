@@ -6,4 +6,5 @@
 
 .list {
 	margin: 10px;
+	transition: background-color 1s;
 }
